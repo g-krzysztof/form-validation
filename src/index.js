@@ -1,17 +1,6 @@
 import './sass/index.scss';
-import SimpleSelect from "react-simple-styleable-select";
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-const options = [
-    {value: 1, label: 'Option 1'},
-    {value: 'text value 2', label: 'Option 2'},
-    {value: {complex: 'object', moreProps: 'hello'}, label: 'Option 3'}
-]
-
-const onChange = (event, val, fullOption) => {
-    console.log(event, val, fullOption )
-};
 
 class App extends React.Component {
 
@@ -19,6 +8,18 @@ class App extends React.Component {
         activeCategory: 'Choose category',
         categoryList: ['category 1', 'category 2', 'category 3', 'category 4'],
         showInputDropdown: false,
+        titleValue: '',
+        titleSmallError: false,
+        titleBigError: false,
+        categoryError: false,
+        imageError: false,
+        imageErrorMessage: false
+    }
+
+    handleTitle = event => {
+        this.setState({
+            titleValue: event.target.value
+        })
     }
 
     handleSelect = () => {
@@ -27,11 +28,58 @@ class App extends React.Component {
         })
     }
 
-    handleClickSelect = (event) => {
+    handleClickSelect = event => {
         this.setState({
             activeCategory: event.target.innerHTML,
             showInputDropdown: false
         })
+    }
+
+    handleUpload = () => {
+        document.getElementById('logo').click();
+    }
+
+    cleanErrors = () => {
+        this.setState({
+            titleSmallError: false,
+            titleBigError: false,
+            categoryError: false,
+            imageErrorMessage: false
+        })
+    }
+
+    handleUploadValidation = () => {
+            // const name = document.getElementById('logo');
+            // console.log('Selected file: ' + name.files.item(0).name);
+            // console.log('Selected file: ' + name.files.item(0).type);
+        this.setState({
+            imageError: true
+        })
+
+    };
+
+    handleProceed = () => {
+        this.cleanErrors();
+        if(this.state.titleValue.length < 5){
+            this.setState({
+                titleSmallError: true
+            })
+        }
+        if(this.state.titleValue.length > 50){
+            this.setState({
+                titleBigError: true
+            })
+        }
+        if(this.state.activeCategory === 'Choose category'){
+            this.setState({
+                categoryError: true
+            })
+        }
+        if(this.state.imageError === false){
+            this.setState({
+                imageErrorMessage: true
+            })
+        }
     }
 
     render() {
@@ -51,24 +99,35 @@ class App extends React.Component {
                             <div className="Form__subtitle Form__underTitle">
                                 Quiz title
                             </div>
-                            <div className="Form__inputWrapper">
-                                <input className="Form__input" type="text" placeholder="Enter quiz title"/>
+                            <div className={`Form__inputWrapper ${this.state.titleSmallError || this.state.titleBigError ? 'Form__errorBorder' : null}`}>
+                                <input className="Form__input" type="text"
+                                       placeholder="Enter quiz title"
+                                       value={this.state.titleValue}
+                                       onChange={(event)=>this.handleTitle(event)}/>
                             </div>
                             <div className="Form__subtitleSmall Form__underLine">
-                                The title can`t be longer than 50 chars.
+                                {this.state.titleValue.length <= 5 ? 'The title must be at least 5 characters long.' : 'The title can`t be longer than 50 chars.'}
                             </div>
+                            {this.state.titleSmallError ? <div className="Form__error">Please provide a name for your quiz</div> : null}
+                            {this.state.titleBigError ? <div className="Form__error">Your quiz name is over 50 characters long</div> : null}
                             <div className="Form__subtitle Form__underTitle">
                                 Quiz logo
                             </div>
                             <div className="Form__wrapperImage">
-                                <button className="Form__uploadBtn">Upload custom logo</button>
+                                <input
+                                    style={{display: 'none'}}
+                                    type="file"
+                                    id="logo" name="logo"
+                                    accept="image/png, image/jpeg"
+                                    onChange={this.handleUploadValidation}/>
+                                <button className="Form__uploadBtn" onClick={this.handleUpload}>Upload custom logo</button>
                             </div>
+                            {this.state.imageErrorMessage ? <div className="Form__error" style={{padding: '10px 0', textAlign: 'center'}}>Please provide logo for your quiz</div> : null}
                             <div className="Form__subtitleSmall Form__underLine" style={{textAlign: 'center'}}>
                                 .JPG, .PNG only
                             </div>
                         </div>
-                        <div className="Form__spacer">
-                        </div>
+                        <div className="Form__spacer"></div>
                         <div className="Form__column">
                             <div className="Form__title">
                                 Select your quiz topic:
@@ -76,8 +135,7 @@ class App extends React.Component {
                             <div className="Form__subtitle Form__underTitle">
                                 Category
                             </div>
-                            <div className="Form__inputWrapper">
-                                {/*<SimpleSelect options={options} onChange={onChange}/>*/}
+                            <div className={`Form__inputWrapper ${this.state.categoryError ? 'Form__errorBorder' : null}`}>
                                 <div className="Form__input Form__flexSpace" onClick={this.handleSelect} style={{cursor: 'pointer'}}>
                                     <div>
                                         {this.state.activeCategory}
@@ -89,9 +147,10 @@ class App extends React.Component {
                                     </div>
                                 </div>
 
-                                    {this.state.showInputDropdown ? <div className="Form__inputDropdown">{categoryList}</div> : null}
+                                {this.state.showInputDropdown ? <div className="Form__inputDropdown">{categoryList}</div> : null}
 
                             </div>
+                            {this.state.categoryError ? <div className="Form__error" style={{padding: '10px 0'}}>Please select a category</div> : null}
                             <div className="Form__subtitle Form__underTitle">
                                 Quiz entry fee
                             </div>
@@ -103,9 +162,10 @@ class App extends React.Component {
                             </div>
                         </div>
                     </div>
-                    <div className="Form__verticalSpace"></div>
+                    <div className="Form__verticalSpace">
+                    </div>
                     <div className="Form__proceedBtnWrapper">
-                        <button className="Form__proceedBtn">Proceed</button>
+                        <button className="Form__proceedBtn" onClick={this.handleProceed}>Proceed</button>
                     </div>
                 </div>
             </div>

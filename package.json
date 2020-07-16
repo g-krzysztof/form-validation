@@ -36,7 +36,6 @@
     "@babel/polyfill": "^7.6.0",
     "@babel/preset-react": "^7.10.4",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-simple-styleable-select": "^1.4.0"
+    "react-dom": "^16.13.1"
   }
 }

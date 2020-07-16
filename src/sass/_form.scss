@@ -6,7 +6,7 @@
   &__column{
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
+    width: 456px;
   }
   &__title{
     font-weight: bold;
@@ -116,5 +116,12 @@
   }
   &__verticalSpace{
     height: 80px;
+  }
+  &__error{
+    color: $error;
+    font-size: 15px;
+  }
+  &__errorBorder{
+    border-color: $error;
   }
 }
