@@ -66,8 +66,9 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      template: "src/templates/mainPage.html",
-      title: "Time4 task"
+      template: "src/templates/mainPage.php",
+      title: "Time4 task",
+      filename: 'index.php'
     }),
     new MiniCssExtractPlugin({
       filename: '[name]-[contenthash].css'
@@ -81,6 +82,10 @@ module.exports = {
         {
           from: 'src/php',
           to: 'validation'
+        },
+        {
+          from: 'public/images',
+          to: 'validation/images'
         }
       ]
     )
