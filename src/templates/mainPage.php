@@ -12,7 +12,7 @@
 <div id="root" style="height: 100%; width: 100%"></div>
 <script>
     window.errors = {
-        name: `
+        image: `
         <?php
         session_start();
         if (isset($_SESSION['imageError'])) {
@@ -21,7 +21,7 @@
         }
         ?>`
     }
-    console.log(window.errors.name)
+    console.log(window.errors.image)
 </script>
 </body>
 

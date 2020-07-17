@@ -23,7 +23,7 @@
         }
         else
         {
-            $_SESSION['imageError'] = 'Please provide image for you quiz';
+            $_SESSION['imageError'] = 'Please provide logo for you quiz [BE error]';
             header("Location: /");
             exit;
         }

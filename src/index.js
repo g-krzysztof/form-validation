@@ -13,7 +13,16 @@ class App extends React.Component {
         titleBigError: false,
         categoryError: false,
         imageError: false,
-        imageErrorMessage: false
+        imageErrorMessage: false,
+        imagePhpError: false
+    }
+
+    componentDidMount() {
+        if(window.errors.image !== ""){
+            this.setState({
+                imagePhpError: window.errors.image
+            })
+        }
     }
 
     handleTitle = event => {
@@ -44,7 +53,8 @@ class App extends React.Component {
             titleSmallError: false,
             titleBigError: false,
             categoryError: false,
-            imageErrorMessage: false
+            imageErrorMessage: false,
+            imagePhpError: false
         })
     }
 
@@ -58,7 +68,7 @@ class App extends React.Component {
 
     };
 
-    handleProceed = (event) => {
+    handleProceed = () => {
         this.cleanErrors();
         if(this.state.titleValue.length < 5){
             this.setState({
@@ -80,9 +90,14 @@ class App extends React.Component {
                 imageErrorMessage: true
             })
         }
-        if(1){
-            document.getElementById('quizForm').click();
-        }
+
+        setTimeout(()=>{
+            const {titleSmallError, titleBigError, categoryError} = this.state;
+            if(titleSmallError !== true && titleBigError !== true && categoryError !== true){
+                document.getElementById('quizForm').click();
+            }
+        },0)
+
     }
 
     render() {
@@ -127,7 +142,8 @@ class App extends React.Component {
                                         onChange={this.handleUploadValidation}/>
                                     <button type="button" className="Form__uploadBtn" onClick={this.handleUpload}>Upload custom logo</button>
                                 </div>
-                                {this.state.imageErrorMessage ? <div className="Form__error" style={{padding: '10px 0', textAlign: 'center'}}>Please provide logo for your quiz</div> : null}
+                                {this.state.imageErrorMessage ? <div className="Form__error" style={{padding: '10px 0', textAlign: 'center'}}>Please provide logo for your quiz [FE error]</div> : null}
+                                {this.state.imagePhpError ? <div className="Form__error" style={{padding: '10px 0', textAlign: 'center'}}>{this.state.imagePhpError}</div> : null}
                                 <div className="Form__subtitleSmall Form__underLine" style={{textAlign: 'center'}}>
                                     .JPG, .PNG only
                                 </div>
@@ -168,7 +184,7 @@ class App extends React.Component {
                         <div className="Form__verticalSpace">
                         </div>
                         <div className="Form__proceedBtnWrapper">
-                            <button className="Form__proceedBtn" onClick={this.handleProceed}>Proceed</button>
+                            <button type="button" className="Form__proceedBtn" onClick={this.handleProceed}>Proceed</button>
                             <button style={{display: 'none'}} type="submit" id="quizForm">submit</button>
                         </div>
                     </div>
