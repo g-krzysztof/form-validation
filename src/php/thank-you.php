@@ -10,6 +10,7 @@
 
     echo $_POST["title"];
     echo $_POST["category"];
+    echo $_POST["currency"];
 
     session_start();
 

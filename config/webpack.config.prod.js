@@ -81,11 +81,11 @@ module.exports = {
         },
         {
           from: 'src/php',
-          to: 'validation'
+          to: 'quiz'
         },
         {
           from: 'public/images',
-          to: 'validation/images'
+          to: 'quiz/images'
         }
       ]
     )

@@ -181,7 +181,7 @@ class App extends React.Component {
 
         return (
             <div className="Page__wrapper">
-                <form action="/validation/form-validation.php" method="post" enctype="multipart/form-data" >
+                <form action="/quiz/thank-you.php" method="post" enctype="multipart/form-data" >
                     <div className="Page__formWrapper">
                         <div className="Form__wrapper">
                             <div className="Form__column">
@@ -248,6 +248,7 @@ class App extends React.Component {
                                 </div>
                                 <div className="Form__inputWrapper">
                                     <input className="Form__input" type="text" placeholder="£ 0.00"
+                                           name="currency"
                                            value={this.state.currency}
                                            onChange={(event)=>this.handleCurrency(event)}
                                            onBlur={(event)=>this.handleCurrencyBlur(event)}
