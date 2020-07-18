@@ -9,18 +9,95 @@ class App extends React.Component {
         categoryList: ['category 1', 'category 2', 'category 3', 'category 4'],
         showInputDropdown: false,
         titleValue: '',
+        currency: '0.0',
+        currencyNumber: false,
         titleSmallError: false,
         titleBigError: false,
         categoryError: false,
         imageError: false,
         imageErrorMessage: false,
-        imagePhpError: false
+        imagePhpError: false,
     }
 
     componentDidMount() {
         if(window.errors.image !== ""){
             this.setState({
                 imagePhpError: window.errors.image
+            })
+        }
+    }
+
+    handleCurrency = event => {
+
+        if(event.target.value.slice(-1) === ',' || event.target.value.slice(-1) === '.'){
+            let currency = event.target.value.substr(2);
+            currency = currency.replace(',','.');
+            if(currency.length === 1){
+                this.setState({
+                    currency: `£ 0.`
+                })
+            } else {
+                if((currency.split(".").length-1) === 1){
+
+                    this.setState({
+                        currency: `£ ${currency}`
+                    })
+                }
+            }
+        } else {
+
+            if(Number.isInteger(parseInt(event.target.value.slice(-1), 10))){
+
+                const currArray = event.target.value.split('');
+                const decimalArray = event.target.value.split('.');
+
+                if(currArray[currArray.length - 2] === '.' && currArray[currArray.length - 1] === '0'){
+                    this.setState({
+                        currency: `${decimalArray[0]}.0`
+                    })
+                }
+                else{
+                    let currency = event.target.value.substr(2);
+
+                    if(currency.length > 0 && currArray[currArray.length - 1] !== '0' ){
+                        currency = parseFloat(currency);
+                    }
+
+                    this.setState({
+                        currency: `£ ${currency}`
+                    })
+                }
+            } else {
+                this.setState({
+                    currency: `£ `
+                })
+            }
+        }
+    }
+
+    handleCurrencyFocus = event => {
+
+        if(this.state.currency === "0.0"){
+            this.setState({
+                currency: `£ `
+            })
+        }
+    }
+
+    handleCurrencyBlur = event => {
+
+        let currency = event.target.value.substr(2);
+
+        if(currency.length > 0){
+            currency = parseFloat(currency);
+            this.setState({
+                currency: `£ ${currency.toFixed(2)}`
+            })
+        }
+
+        if(currency.length === 0){
+            this.setState({
+                currency: `0.0`
             })
         }
     }
@@ -59,13 +136,9 @@ class App extends React.Component {
     }
 
     handleUploadValidation = () => {
-        // const name = document.getElementById('logo');
-        // console.log('Selected file: ' + name.files.item(0).name);
-        // console.log('Selected file: ' + name.files.item(0).type);
         this.setState({
             imageError: true
         })
-
     };
 
     handleProceed = () => {
@@ -174,7 +247,13 @@ class App extends React.Component {
                                     Quiz entry fee
                                 </div>
                                 <div className="Form__inputWrapper">
-                                    <input className="Form__input" type="text" placeholder="£ 0"/>
+                                    <input className="Form__input" type="text" placeholder="£ 0.00"
+                                           value={this.state.currency}
+                                           onChange={(event)=>this.handleCurrency(event)}
+                                           onBlur={(event)=>this.handleCurrencyBlur(event)}
+                                           onFocus={(event)=>this.handleCurrencyFocus(event)}
+
+                                    />
                                 </div>
                                 <div className="Form__subtitleSmall Form__underLine">
                                     Min. entry fee is £5.00.
@@ -187,6 +266,10 @@ class App extends React.Component {
                             <button type="button" className="Form__proceedBtn" onClick={this.handleProceed}>Proceed</button>
                             <button style={{display: 'none'}} type="submit" id="quizForm">submit</button>
                         </div>
+                        <div style={{
+                            padding: '20px 0 0 0',
+                            textAlign: 'center'
+                        }}>Proceed button allow send form without upload image, so you can see error from backend.</div>
                     </div>
                 </form>
             </div>

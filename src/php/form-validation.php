@@ -32,7 +32,7 @@
     ?>
 </div>
 
-<div><a href="http://localhost/051_4time_task_webpack/build/">link</a></div>
+<div><a href="/">link</a></div>
 </body>
 </html>
 
