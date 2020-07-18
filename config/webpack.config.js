@@ -56,5 +56,10 @@ module.exports = {
       title: "Time4 task",
       filename: 'index.php'
     }),
+    new HtmlWebpackPlugin({
+      template: "src/templates/thank-you.php",
+      title: "Time4 task",
+      filename: 'thank-you.php'
+    }),
   ]
 }

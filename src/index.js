@@ -181,7 +181,7 @@ class App extends React.Component {
 
         return (
             <div className="Page__wrapper">
-                <form action="/quiz/thank-you.php" method="post" enctype="multipart/form-data" >
+                <form action="/thank-you.php" method="post" enctype="multipart/form-data" >
                     <div className="Page__formWrapper">
                         <div className="Form__wrapper">
                             <div className="Form__column">
