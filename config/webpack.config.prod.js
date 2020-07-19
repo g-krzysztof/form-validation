@@ -83,11 +83,7 @@ module.exports = {
         {
           from: 'public/images',
           to: 'images'
-        },
-        // {
-        //   from: 'src/php',
-        //   to: 'quiz'
-        // },
+        }
       ]
     )
   ]

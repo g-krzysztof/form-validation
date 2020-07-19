@@ -29,13 +29,13 @@
                             if(move_uploaded_file($_FILES["logo"]["tmp_name"], $filepath))
                             {
                                 echo "<img src=".$filepath." />";
-                            }
-                            else
-                            {
-                                $_SESSION['imageError'] = 'Please provide logo for you quiz [BE error]';
-                                header("Location: /");
-                                exit;
-                            }
+                        }
+                        else
+                        {
+                        $_SESSION['imageError'] = 'Please provide logo for you quiz [BE error]';
+                        header("Location: /");
+                        exit;
+                        }
                         }
                         ?>
                     </div>

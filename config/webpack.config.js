@@ -52,14 +52,14 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      template: "src/templates/mainPage.php",
+      template: "src/templates/mainPage.html",
       title: "Time4 task",
-      filename: 'index.php'
+      filename: 'index.html'
     }),
     new HtmlWebpackPlugin({
-      template: "src/templates/thank-you.php",
+      template: "src/templates/thank-you.html",
       title: "Time4 task",
-      filename: 'thank-you.php'
+      filename: 'thank-you.html'
     }),
   ]
 }
