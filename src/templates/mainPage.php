@@ -19,9 +19,17 @@
             echo $_SESSION['imageError'];
             unset($_SESSION['imageError']);
         }
-        ?>`
+        ?>`,
+        currency: `
+        <?php
+        if (isset($_SESSION['currencyError'])) {
+            echo $_SESSION['currencyError'];
+            unset($_SESSION['currencyError']);
+        }
+        ?>
+        `
     }
-    console.log(window.errors.image)
+    console.log(window.errors.image, window.errors.currency)
 </script>
 </body>
 

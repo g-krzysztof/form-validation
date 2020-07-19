@@ -8,7 +8,28 @@
     <title>Time4 task</title>
 </head>
 
-<?php session_start(); ?>
+<?php session_start();
+$filepath = "images/pix.jpg";
+if(isset($_FILES["logo"]["name"]))
+{
+    $filepath = "images/" . $_FILES["logo"]["name"];
+    if(!move_uploaded_file($_FILES["logo"]["tmp_name"], $filepath))
+    {
+        $_SESSION['imageError'] = 'Please provide logo for you quiz [BE error]';
+    }
+}
+
+$currencyNumber = str_replace("£ ","", $_POST["currency"]);
+if($currencyNumber < 5){
+    $_SESSION['currencyError'] = 'Your entry fee (' . $_POST["currency"] . ') is too low [BE error]';
+}
+
+if(isset($_SESSION['imageError']) || isset($_SESSION['currencyError']) ){
+    header("Location: /");
+    exit;
+}
+
+?>
 
 <body style="height: 100vh; width: 100vw">
 
@@ -21,23 +42,7 @@
             <div class="ThankYou__contentWrapper">
                 <div class="ThankYou__logoSection">
                     <div class="ThankYou__imageWrapper">
-                        <?php
-                        if(isset($_FILES["logo"]["name"]))
-                        {
-                            $filepath = "images/" . $_FILES["logo"]["name"];
-
-                            if(move_uploaded_file($_FILES["logo"]["tmp_name"], $filepath))
-                            {
-                                echo "<img src=".$filepath." />";
-                            }
-                            else
-                            {
-                                $_SESSION['imageError'] = 'Please provide logo for you quiz [BE error]';
-                                header("Location: /");
-                                exit;
-                            }
-                        }
-                        ?>
+                        <?php echo "<img src=".$filepath." />" ?>
                     </div>
                     <div class="ThankYou__infoWrapper">
                         <div class="ThankYou__quizTitle">
