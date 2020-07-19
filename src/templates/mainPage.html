@@ -11,17 +11,53 @@
 <body style="height: 100vh; width: 100vw">
 <div id="root" style="height: 100%; width: 100%"></div>
 <script>
+    <?php session_start() ?>
+    window.quizData = {
+        title: `<?php
+        if (isset($_SESSION['titleData'])) {
+            echo $_SESSION['titleData'];
+            unset($_SESSION['titleData']);
+        }
+        ?>`,
+        category: `<?php
+        if (isset($_SESSION['categoryData'])) {
+            echo $_SESSION['categoryData'];
+            unset($_SESSION['categoryData']);
+        }
+        ?>`,
+    }
     window.errors = {
-        image: `
-        <?php
-        session_start();
+        image: `<?php
         if (isset($_SESSION['imageError'])) {
             echo $_SESSION['imageError'];
             unset($_SESSION['imageError']);
         }
+        ?>`,
+        currency: `<?php
+        if (isset($_SESSION['currencyError'])) {
+            echo $_SESSION['currencyError'];
+            unset($_SESSION['currencyError']);
+        }
+        ?>`,
+        imageType: `<?php
+        if (isset($_SESSION['imageTypeError'])) {
+            echo $_SESSION['imageTypeError'];
+            unset($_SESSION['imageTypeError']);
+        }
+        ?>`,
+        title: `<?php
+        if (isset($_SESSION['titleError'])) {
+            echo $_SESSION['titleError'];
+            unset($_SESSION['titleError']);
+        }
+        ?>`,
+        category: `<?php
+        if (isset($_SESSION['categoryError'])) {
+            echo $_SESSION['categoryError'];
+            unset($_SESSION['categoryError']);
+        }
         ?>`
     }
-    console.log(window.errors.image)
 </script>
 </body>
 

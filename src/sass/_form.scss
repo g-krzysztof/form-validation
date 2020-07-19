@@ -2,11 +2,20 @@
   &__wrapper{
     display: flex;
     justify-content: space-evenly;
+    @media(max-width: 1024px) {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
   }
   &__column{
     display: flex;
     flex-direction: column;
     width: 456px;
+    @media(max-width: 1024px) {
+      width: 80%;
+      margin: 0 auto;
+    }
   }
   &__title{
     font-weight: bold;
@@ -113,6 +122,10 @@
     &:hover{
       background-color: darken($pink, 10%);
     }
+    @media(max-width: 1024px) {
+      width: 80%;
+      margin: 0 auto;
+    }
   }
   &__verticalSpace{
     height: 80px;
@@ -123,5 +136,13 @@
   }
   &__errorBorder{
     border-color: $error;
+  }
+  &__validationRules{
+    font-size: 14px;
+    margin: 20px 0 0 0;
+    @media(max-width: 1024px) {
+      width: 80%;
+      margin: 0 auto;
+    }
   }
 }

@@ -10,6 +10,9 @@
 
 <?php session_start();
 
+$_SESSION['titleData'] = $_POST["title"];
+$_SESSION['categoryData'] = $_POST["category"];
+
 function console_log( $data ){
     echo '<script>';
     echo 'console.log('. json_encode( $data ) .')';
@@ -50,7 +53,7 @@ if(isset($_FILES["logo"]["name"]))
 }
 
 $currencyNumber = str_replace("£ ","", $_POST["currency"]);
-if($currencyNumber < 5){
+if($currencyNumber < 10){
     $_SESSION['currencyError'] = 'Your entry fee (' . $_POST["currency"] . ') is too low [BE error]';
 }
 
@@ -99,7 +102,7 @@ if(isset($_SESSION['imageError']) || isset($_SESSION['currencyError']) || $_SESS
                 </div>
             </div>
             <div class="Form__proceedBtnWrapper" style="margin: 65px 0 0 0">
-                <a href="/" style="text-decoration: none">
+                <a href="/logout/clear.php" style="text-decoration: none">
                     <button type="button" class="Form__proceedBtn" style="width: 305px;">Create another one!</button>
                 </a>
             </div>

@@ -14,15 +14,51 @@ class App extends React.Component {
         titleSmallError: false,
         titleBigError: false,
         categoryError: false,
+        currencyError: false,
         imageError: false,
         imageErrorMessage: false,
         imagePhpError: false,
+        imageTypePhpError: false,
+        currencyPhpError: false,
+        titlePhpError: false,
+        categoryPhpError: false
     }
 
     componentDidMount() {
+
+        if(window.quizData.title !== ""){
+            this.setState({
+                titleValue: window.quizData.title
+            })
+        }
+
+        if(window.quizData.category !== ""){
+            this.setState({
+                activeCategory: window.quizData.category
+            })
+        }
+
         if(window.errors.image !== ""){
             this.setState({
                 imagePhpError: window.errors.image
+            })
+        }
+
+        if(window.errors.imageType !== "validateOk"){
+            this.setState({
+                imageTypePhpError: window.errors.imageType
+            })
+        }
+
+        if(window.errors.title !== ""){
+            this.setState({
+                titlePhpError: window.errors.title
+            })
+        }
+
+        if(window.errors.currency !== ""){
+            this.setState({
+                currencyPhpError: window.errors.currency
             })
         }
     }
@@ -122,6 +158,9 @@ class App extends React.Component {
     }
 
     handleUpload = () => {
+        this.setState({
+            imageError: true
+        })
         document.getElementById('logo').click();
     }
 
@@ -130,8 +169,14 @@ class App extends React.Component {
             titleSmallError: false,
             titleBigError: false,
             categoryError: false,
+            currencyError: false,
+            imageError: false,
             imageErrorMessage: false,
-            imagePhpError: false
+            imagePhpError: false,
+            imageTypePhpError: false,
+            currencyPhpError: false,
+            titlePhpError: false,
+            categoryPhpError: false
         })
     }
 
@@ -148,6 +193,11 @@ class App extends React.Component {
                 titleSmallError: true
             })
         }
+        if(this.state.titleValue.length < 5){
+            this.setState({
+                titleSmallError: true
+            })
+        }
         if(this.state.titleValue.length > 50){
             this.setState({
                 titleBigError: true
@@ -158,6 +208,11 @@ class App extends React.Component {
                 categoryError: true
             })
         }
+        if(this.state.currency === '0.0'){
+            this.setState({
+                currencyError: true
+            })
+        }
         if(this.state.imageError === false){
             this.setState({
                 imageErrorMessage: true
@@ -165,8 +220,13 @@ class App extends React.Component {
         }
 
         setTimeout(()=>{
-            const {titleSmallError, titleBigError, categoryError} = this.state;
-            if(titleSmallError !== true && titleBigError !== true && categoryError !== true){
+            const {titleSmallError, titleBigError, categoryError, imageError, currencyError} = this.state;
+            if(
+                titleSmallError !== true
+                && titleBigError !== true
+                && categoryError !== true
+                && currencyError !== true
+            ){
                 document.getElementById('quizForm').click();
             }
         },0)
@@ -191,7 +251,7 @@ class App extends React.Component {
                                 <div className="Form__subtitle Form__underTitle">
                                     Quiz title
                                 </div>
-                                <div className={`Form__inputWrapper ${this.state.titleSmallError || this.state.titleBigError ? 'Form__errorBorder' : null}`}>
+                                <div className={`Form__inputWrapper ${this.state.titleSmallError || this.state.titleBigError || this.state.titlePhpError ? 'Form__errorBorder' : null}`}>
                                     <input className="Form__input" type="text"
                                            name="title"
                                            placeholder="Enter quiz title"
@@ -203,6 +263,7 @@ class App extends React.Component {
                                 </div>
                                 {this.state.titleSmallError ? <div className="Form__error">Please provide a name for your quiz</div> : null}
                                 {this.state.titleBigError ? <div className="Form__error">Your quiz name is over 50 characters long</div> : null}
+                                {this.state.titlePhpError ? <div className="Form__error">{this.state.titlePhpError}</div> : null}
                                 <div className="Form__subtitle Form__underTitle">
                                     Quiz logo
                                 </div>
@@ -211,14 +272,15 @@ class App extends React.Component {
                                         style={{display: 'none'}}
                                         type="file"
                                         id="logo" name="logo"
-                                        accept="image/png, image/jpeg"
+                                        accept="image/gif, image/jpeg"
                                         onChange={this.handleUploadValidation}/>
                                     <button type="button" className="Form__uploadBtn" onClick={this.handleUpload}>Upload custom logo</button>
                                 </div>
                                 {this.state.imageErrorMessage ? <div className="Form__error" style={{padding: '10px 0', textAlign: 'center'}}>Please provide logo for your quiz [FE error]</div> : null}
                                 {this.state.imagePhpError ? <div className="Form__error" style={{padding: '10px 0', textAlign: 'center'}}>{this.state.imagePhpError}</div> : null}
+                                {this.state.imageTypePhpError ? <div className="Form__error" style={{padding: '10px 0', textAlign: 'center'}}>{this.state.imageTypePhpError}</div> : null}
                                 <div className="Form__subtitleSmall Form__underLine" style={{textAlign: 'center'}}>
-                                    .JPG, .PNG only
+                                    .JPG, .GIF only
                                 </div>
                             </div>
                             <div className="Form__spacer"></div>
@@ -231,7 +293,7 @@ class App extends React.Component {
                                 </div>
                                 <div className={`Form__inputWrapper ${this.state.categoryError ? 'Form__errorBorder' : null}`}>
                                     <div className="Form__input Form__flexSpace" onClick={this.handleSelect} style={{cursor: 'pointer'}}>
-                                        <input className="Form__input" type="text" name="category" value={this.state.activeCategory} readOnly={true}/>
+                                        <input className="Form__input" style={{cursor: 'pointer'}} type="text" name="category" value={this.state.activeCategory} readOnly={true}/>
                                         <div>
                                             <svg x="0px" y="0px" width="10px" height="5px" viewBox="0 0 10 5" enableBackground="new 0 0 10 5">
                                                 <polygon fill="#EA4A9A" points="0,0 4.98,5 10,0 "/>
@@ -246,7 +308,7 @@ class App extends React.Component {
                                 <div className="Form__subtitle Form__underTitle">
                                     Quiz entry fee
                                 </div>
-                                <div className="Form__inputWrapper">
+                                <div className={`Form__inputWrapper ${this.state.currencyError || this.state.currencyPhpError ? 'Form__errorBorder' : null}`}>
                                     <input className="Form__input" type="text" placeholder="£ 0.00"
                                            name="currency"
                                            value={this.state.currency}
@@ -259,6 +321,8 @@ class App extends React.Component {
                                 <div className="Form__subtitleSmall Form__underLine">
                                     Min. entry fee is £5.00.
                                 </div>
+                                {this.state.currencyError ? <div className="Form__error">Please provide a value for quiz entry fee</div> : null}
+                                {this.state.currencyPhpError ? <div className="Form__error">{this.state.currencyPhpError}</div> : null}
                             </div>
                         </div>
                         <div className="Form__verticalSpace">
@@ -267,10 +331,17 @@ class App extends React.Component {
                             <button type="button" className="Form__proceedBtn" onClick={this.handleProceed}>Proceed</button>
                             <button style={{display: 'none'}} type="submit" id="quizForm">submit</button>
                         </div>
-                        <div style={{
-                            padding: '20px 0 0 0',
-                            textAlign: 'center'
-                        }}>Proceed button allow send form without upload image, so you can see error from backend.</div>
+                        <div
+                            className="Form__validationRules"
+                            style={{
+                                padding: '20px 0 0 0',
+                                textAlign: 'center'
+                            }}>
+                            1. Proceed button allow send form with all type images - validation type error show from backend.<br /><br />
+                            2. Quiz title: length minimum 5 required at the front, but 10 on the back. <br /><br />
+                            3. Entry fee: value minimum 5 required at the front, but 10 on the back. <br /><br />
+
+                        </div>
                     </div>
                 </form>
             </div>
@@ -281,5 +352,5 @@ class App extends React.Component {
 }
 
 if(document.getElementById("root")){
-ReactDOM.render(<App />, document.getElementById("root"));
+    ReactDOM.render(<App />, document.getElementById("root"));
 }
