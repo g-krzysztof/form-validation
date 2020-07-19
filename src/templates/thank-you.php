@@ -9,6 +9,32 @@
 </head>
 
 <?php session_start();
+
+function console_log( $data ){
+    echo '<script>';
+    echo 'console.log('. json_encode( $data ) .')';
+    echo '</script>';
+}
+
+function validate($upload){
+    if($upload['size'] == 0) return "Image not uploaded correctly.";
+    if($upload['size'] > 2097152){ // Measured in bytes, this is equal to 2MB
+        $filesize = $upload['size']/1048576; // Converts from bytes to Megabytes
+        return "The image you uploaded has a filesize that is too large. Please reduce your image to < 2MB. It is currently ".$filesize."MB. [BE error]";
+    }
+
+    if(!($upload['type'] == "image/gif" || $upload['type'] == "image/jpeg" || $upload['type'] == "image/jpg")) {
+//        console_log( $upload['type']);
+        return "Uploads of that file type are not allowed. You need a jpg or gif image. [BE error]";
+    }
+    $blacklist = array(".php", ".phtml", ".php3", ".php4", ".ph3", ".ph4");
+    foreach ($blacklist as $item) {
+        if(preg_match("/$item\$/i", $upload['name']))
+            return "Uploads with that file extension are not allowed. You need an image ending in .jpg or .gif [BE error]";
+    }
+    return "validateOk";
+};
+
 $filepath = "images/pix.jpg";
 if(isset($_FILES["logo"]["name"]))
 {
@@ -16,7 +42,11 @@ if(isset($_FILES["logo"]["name"]))
     if(!move_uploaded_file($_FILES["logo"]["tmp_name"], $filepath))
     {
         $_SESSION['imageError'] = 'Please provide logo for you quiz [BE error]';
+    } else {
+
+        $_SESSION['imageTypeError'] = validate($_FILES["logo"]);
     }
+
 }
 
 $currencyNumber = str_replace("£ ","", $_POST["currency"]);
@@ -24,7 +54,17 @@ if($currencyNumber < 5){
     $_SESSION['currencyError'] = 'Your entry fee (' . $_POST["currency"] . ') is too low [BE error]';
 }
 
-if(isset($_SESSION['imageError']) || isset($_SESSION['currencyError']) ){
+
+if(strlen($_POST["title"]) < 10 || strlen($_POST["title"] > 50)){
+    $_SESSION['titleError'] = 'Your title length is wrong (too short / too long) [BE error]';
+}
+
+if($_POST["category"] == "Choose category"){
+    $_SESSION['categoryError'] = 'Choose your quiz category [BE error]';
+}
+
+
+if(isset($_SESSION['imageError']) || isset($_SESSION['currencyError']) || $_SESSION['imageTypeError'] != "validateOk"  || isset($_SESSION['titleError']) || isset($_SESSION['categoryError']) ){
     header("Location: /");
     exit;
 }

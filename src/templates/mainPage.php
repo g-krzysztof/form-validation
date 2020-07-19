@@ -27,9 +27,34 @@
             unset($_SESSION['currencyError']);
         }
         ?>
+        `,
+        imageType: `
+        <?php
+        if (isset($_SESSION['imageTypeError'])) {
+            echo $_SESSION['imageTypeError'];
+            unset($_SESSION['imageTypeError']);
+        }
+        ?>
+        `,
+        title: `
+        <?php
+        if (isset($_SESSION['titleError'])) {
+            echo $_SESSION['titleError'];
+            unset($_SESSION['titleError']);
+        }
+        ?>
+        `,
+        category: `
+        <?php
+        if (isset($_SESSION['categoryError'])) {
+            echo $_SESSION['categoryError'];
+            unset($_SESSION['categoryError']);
+        }
+        ?>
         `
     }
-    console.log(window.errors.image, window.errors.currency)
+    console.log(window.errors.image, window.errors.currency, window.errors.title, window.errors.category)
+    console.log(window.errors.imageType)
 </script>
 </body>
 
